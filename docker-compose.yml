@@ -1,0 +1,191 @@
+services:
+  palworld:
+    image: thijsvanloef/palworld-server-docker:latest
+    restart: unless-stopped
+    container_name: palworld-server
+    stop_grace_period: 30s
+    env_file:
+      - .env
+
+    ports:
+      - "15368:8211/udp"
+      - "27015:27015/udp"
+      - "8212:8212/tcp"
+
+    environment:
+      PUID: 1000
+      PGID: 1000
+      PORT: 8211
+      PLAYERS: 6
+
+      # SERVER SETTINGS
+      SERVER_NAME: "nightclub"
+      SERVER_PASSWORD: "nightclub"
+      ADMIN_PASSWORD: "nightclub123"
+      SERVER_DESCRIPTION: "palworld-server hosted by rycerzes"
+      REST_API_PORT: 8212
+      REST_API_ENABLED: true
+      MULTITHREADING: true
+      RCON_ENABLED: false
+      AUTO_REACTIVATE_ENABLED: true
+      AUTO_UPDATE_ENABLED: true
+      BACKUP_ENABLED: true
+      BACKUP_CRON_EXPRESSION: "0 */2 * * *"
+      DELETE_OLD_BACKUPS: true
+      OLD_BACKUP_DAYS: 30
+      TZ: "Asia/Kolkata"
+      COMMUNITY: false
+      COOP_PLAYER_MAX_NUM: 6
+
+      # WORLD SETTINGS
+      # ── Difficulty & world rates ──
+      DIFFICULTY: "None"
+      RANDOMIZER_TYPE: ""
+      RANDOMIZER_SEED: "none"
+      DAYTIME_SPEEDRATE: "1.000000"
+      NIGHTTIME_SPEEDRATE: "1.000000"
+      EXP_RATE: "5.000000"
+      PAL_CAPTURE_RATE: "3.000000"
+      PAL_SPAWN_NUM_RATE: "1.000000"
+      SUPPLY_DROP_SPAN: "120"
+
+      # ── Combat modifiers ──
+      PAL_DAMAGE_RATE_ATTACK: "1.000000"
+      PAL_DAMAGE_RATE_DEFENSE: "1.000000"
+      PLAYER_DAMAGE_RATE_ATTACK: "1.000000"
+      PLAYER_DAMAGE_RATE_DEFENSE: "1.000000"
+
+      # ── Player stats ──
+      PLAYER_STOMACH_DECREASE_RATE: "0.0010000"
+      PLAYER_STAMINA_DECREASE_RATE: "0.001000"
+      PLAYER_AUTO_HP_REGEN_RATE: "5.000000"
+      PLAYER_AUTO_HP_REGEN_RATE_IN_SLEEP: "20.0000"
+
+      # ── Pal stats ──
+      PAL_STOMACH_DECREASE_RATE: "0.0010000"
+      PAL_STAMINA_DECREASE_RATE: "0.0010000"
+      PAL_AUTO_HP_REGEN_RATE: "5.000000"
+      PAL_AUTO_HP_REGEN_RATE_IN_SLEEP: "20.00"
+
+      # ── Building & resources ──
+      BUILD_OBJECT_HP_RATE: "1.000000"
+      BUILD_OBJECT_DAMAGE_RATE: "1.000000"
+      BUILD_OBJECT_DETERIORATION_DAMAGE_RATE: "0.000000"
+      COLLECTION_DROP_RATE: "1.000000"
+      COLLECTION_OBJECT_HP_RATE: "1.000000"
+      ENEMY_DROP_ITEM_RATE: "2.000000"
+
+      # ── Death, PvP toggles, aim assist ──
+      DEATH_PENALTY: "None"
+      ENABLE_PLAYER_TO_PLAYER_DAMAGE: "False"
+      ENABLE_FRIENDLY_FIRE: "False"
+      ENABLE_INVADER_ENEMY: "True"
+      ACTIVE_UNKO: "False"
+      ENABLE_AIM_ASSIST_PAD: "True"
+      ENABLE_AIM_ASSIST_KEYBOARD: "True"
+
+      # ── Dropped items ──
+      DROP_ITEM_MAX_NUM: "3000"
+      DROP_ITEM_MAX_NUM_UNKO: "100"
+      DROP_ITEM_ALIVE_MAX_HOURS: "1.000000"
+      ITEM_WEIGHT_RATE: "0.0100000"
+
+    
+      # ── Base camps ──
+      BASE_CAMP_MAX_NUM: "128"
+      BASE_CAMP_WORKER_MAX_NUM: "20"
+      MAX_BUILDING_LIMIT_NUM: "0"
+      BUILD_AREA_LIMIT: "False"
+      WORK_SPEED_RATE: "5.0"
+
+      # ── Breeding & bosses ──
+      PAL_EGG_DEFAULT_HATCHING_TIME: "0.000000"
+      ENABLE_PREDATOR_BOSS_PAL: "True"
+
+      # ── Login & persistence ──
+      ENABLE_NON_LOGIN_PENALTY: "False"
+      EXIST_PLAYER_AFTER_LOGOUT: "False"
+      ENABLE_FAST_TRAVEL: "True"
+
+      # ── Chat / player list ──
+      SHOW_PLAYER_LIST: "True"
+      CHAT_POST_LIMIT_PER_MINUTE: "30"
+      IS_SHOW_JOIN_LEFT_MESSAGE: "True"
+
+      # ── Data, mods, corruption ──
+      USE_BACKUP_SAVE_DATA: "True"
+      ALLOW_CLIENT_MOD: "True"
+      ITEM_CORRUPTION_MULTIPLIER: "1.000000"
+      EQUIPMENT_DURABILITY_DAMAGE_RATE: "0.0100000"
+
+      # ── Pal Box global transfer ──
+      ALLOW_GLOBAL_PALBOX_EXPORT: "True"
+      ALLOW_GLOBAL_PALBOX_IMPORT: "True"
+
+      # ── Stat enhancement toggles ──
+      ALLOW_ENHANCE_STAT_HEALTH: "True"
+      ALLOW_ENHANCE_STAT_ATTACK: "True"
+      ALLOW_ENHANCE_STAT_STAMINA: "True"
+      ALLOW_ENHANCE_STAT_WEIGHT: "True"
+      ALLOW_ENHANCE_STAT_WORK_SPEED: "True"
+
+      # DISCORD SETTINGS
+      DISCORD_SUPPRESS_NOTIFICATIONS: "true"    # true = send as @silent (no ping sound)
+      DISCORD_CONNECT_TIMEOUT: "30"              # seconds
+      DISCORD_MAX_TIMEOUT: "30"                  # seconds
+      DISCORD_WEBHOOK_URL: ${DISCORD_WEBHOOK_URL:-}
+
+      # ── Server start ──
+      DISCORD_PRE_START_MESSAGE: "Server has been started!"
+      DISCORD_PRE_START_MESSAGE_ENABLED: "true"
+      DISCORD_PRE_START_MESSAGE_URL: ${DISCORD_WEBHOOK_URL:-}
+
+      # ── Shutdown ──
+      DISCORD_PRE_SHUTDOWN_MESSAGE: "Server is shutting down..."
+      DISCORD_PRE_SHUTDOWN_MESSAGE_ENABLED: "true"
+      DISCORD_PRE_SHUTDOWN_MESSAGE_URL: ${DISCORD_WEBHOOK_URL:-}
+      DISCORD_POST_SHUTDOWN_MESSAGE: "Server is stopped!"
+      DISCORD_POST_SHUTDOWN_MESSAGE_ENABLED: "true"
+      DISCORD_POST_SHUTDOWN_MESSAGE_URL: ${DISCORD_WEBHOOK_URL:-}
+
+      # ── Update / reboot cycle ──
+      DISCORD_PRE_UPDATE_BOOT_MESSAGE: "Server is updating..."
+      DISCORD_PRE_UPDATE_BOOT_MESSAGE_ENABLED: "true"
+      DISCORD_PRE_UPDATE_BOOT_MESSAGE_URL: ${DISCORD_WEBHOOK_URL:-}
+      DISCORD_POST_UPDATE_BOOT_MESSAGE: "Server update complete!"
+      DISCORD_POST_UPDATE_BOOT_MESSAGE_ENABLED: "true"
+      DISCORD_POST_UPDATE_BOOT_MESSAGE_URL: ${DISCORD_WEBHOOK_URL:-}
+
+      DISCORD_PLAYER_JOIN_MESSAGE: "player_name has joined Palworld!"
+      DISCORD_PLAYER_JOIN_MESSAGE_ENABLED: "true"
+      DISCORD_PLAYER_JOIN_MESSAGE_URL: ${DISCORD_WEBHOOK_URL:-}
+      DISCORD_PLAYER_LEAVE_MESSAGE: "player_name has left Palworld."
+      DISCORD_PLAYER_LEAVE_MESSAGE_ENABLED: "true"
+      DISCORD_PLAYER_LEAVE_MESSAGE_URL: ${DISCORD_WEBHOOK_URL:-}
+
+      # ── Backups ──
+      DISCORD_PRE_BACKUP_MESSAGE: "Creating backup..."
+      DISCORD_PRE_BACKUP_MESSAGE_ENABLED: "true"
+      DISCORD_PRE_BACKUP_MESSAGE_URL: ${DISCORD_WEBHOOK_URL:-}
+      DISCORD_POST_BACKUP_MESSAGE: "Backup created at file_path"
+      DISCORD_POST_BACKUP_MESSAGE_ENABLED: "true"
+      DISCORD_POST_BACKUP_MESSAGE_URL: ${DISCORD_WEBHOOK_URL:-}
+
+      # ── Old-backup cleanup ──
+      DISCORD_PRE_BACKUP_DELETE_MESSAGE: "Removing backups older than old_backup_days days"
+      DISCORD_PRE_BACKUP_DELETE_MESSAGE_ENABLED: "true"
+      DISCORD_PRE_BACKUP_DELETE_MESSAGE_URL: ${DISCORD_WEBHOOK_URL:-}
+      DISCORD_POST_BACKUP_DELETE_MESSAGE: "Removed backups older than old_backup_days days"
+      DISCORD_POST_BACKUP_DELETE_MESSAGE_ENABLED: "true"
+      DISCORD_POST_BACKUP_DELETE_MESSAGE_URL: ${DISCORD_WEBHOOK_URL:-}
+      DISCORD_ERR_BACKUP_DELETE_MESSAGE: "Unable to delete old backups, OLD_BACKUP_DAYS is not an integer..."
+      DISCORD_ERR_BACKUP_DELETE_MESSAGE_ENABLED: "true"
+      DISCORD_ERR_BACKUP_DELETE_MESSAGE_URL: ${DISCORD_WEBHOOK_URL:-}
+      
+    volumes:
+      - palworld-saves:/palworld/
+      - ./backups:/palworld/backups
+
+volumes:
+  palworld-saves:
+
